@@ -46,46 +46,24 @@ public class UserServiceImpl implements UserService {
 	public void addGrapeCount() throws IOException {
 		User user = userRepository.findById(1L)
 			.orElseThrow(() -> new IllegalArgumentException("유저가 존재하지 않습니다."));
-
 		BufferedReader reader = new BufferedReader(new FileReader("c:\\pathhack\\text.txt"));
-
 		String ch;
-		ArrayList<String>  timeRecord = new ArrayList<>();
+		int brushCount = 0;
 		while ((ch = reader.readLine()) != null) {
-			//서브0,10의 값이 3이상 그리고 20의값이 1000이상 일때
-			timeRecord.add(ch.substring(0, 10));
-		}
+			if (Integer.parseInt(ch.substring(20)) >= 1000)
+				brushCount++;
 
-		ArrayList<String> time = new ArrayList<>();
-		for (int i = 0; i < timeRecord.size(); i++) {
-			int count =0;
-			for(int j=i+1; j< timeRecord.size(); j++) {
-				count++;
-				if (Objects.equals(timeRecord.get(i), timeRecord.get(j))) {
-				}
-
+			if (brushCount == 3) {
+				user.updateGrapeCount();
+				break;
 			}
 		}
-			/*for(int i=0; i<timeRecord-1; i++){// 자기 자신을 제외한 모든 이름 비교
-				for(int j=i+1; j<valueLength; j++){ // 앞에 비교한 이름을 비교하지 않는다.
-					if(value[i] == value[j]){
-						listA.add(value[i]); // 같으면 추가한다.
-			*/
-//		reader.close();
-
+		reader.close();
+		System.out.println("user.getGrapeCount() = " + user.getGrapeCount());
 	}
 	// 	}
 	// }
 	// return listA;
-
-
-
-	// if (Integer.parseInt(ch.substring(20)) >= 1000)
-	// 		user.updateGrapeCount();
-	// 	brushCount ++;
-
-	// if (brushCount  >= 3)
-	// 	break;
 
 	@Override
 	public void createUser(CreateUserDTO createUser) {
