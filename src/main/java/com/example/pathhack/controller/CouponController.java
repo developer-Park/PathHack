@@ -15,6 +15,7 @@ import com.example.pathhack.dto.CreateCouponDTO;
 import com.example.pathhack.dto.GetCouponResponse;
 import com.example.pathhack.dto.GetUserDTO;
 import com.example.pathhack.dto.ReceivedCouponDTO;
+import com.example.pathhack.dto.UseTheCouponDTO;
 import com.example.pathhack.dto.UserResponse;
 import com.example.pathhack.service.CouponService;
 
@@ -42,10 +43,10 @@ public class CouponController {
 		ReceivedCouponDTO receivedCouponDTO = new ReceivedCouponDTO(couponId,userId);
 		couponService.receivedCoupon(receivedCouponDTO);
 	}
-	//
-	// @PutMapping("/coupon/{couponId}/user/{userId}")
-	// public void receivedCoupon(@PathVariable Long couponId, @PathVariable Long userId) {
-	// 	ReceivedCouponDTO receivedCouponDTO = new ReceivedCouponDTO(couponId,userId);
-	// 	couponService.receivedCoupon(receivedCouponDTO);
-	// }
+
+	@PutMapping("/coupon/{received_couponId}/user/{userId}")
+	public void useTheCoupon(@PathVariable Long received_couponId, @PathVariable Long userId) {
+		UseTheCouponDTO useTheCouponDTO = new UseTheCouponDTO(userId,received_couponId);
+		couponService.useTheCoupon(useTheCouponDTO);
+	}
 }

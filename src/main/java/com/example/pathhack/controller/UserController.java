@@ -1,10 +1,6 @@
 package com.example.pathhack.controller;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.IOException;
-import java.nio.charset.Charset;
-
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,7 +10,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.pathhack.dto.CreateUserDTO;
 import com.example.pathhack.dto.GetUserDTO;
-import com.example.pathhack.dto.GrapeResponse;
 import com.example.pathhack.dto.UserResponse;
 import com.example.pathhack.service.UserService;
 

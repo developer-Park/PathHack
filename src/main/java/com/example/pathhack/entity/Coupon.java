@@ -46,5 +46,9 @@ public class Coupon extends TimeStamped {
 	public void updateCoupon(String eventName) {
 		this.couponName = eventName;
 	}
+
+	public void updateIsUsed() {
+		this.isUsed = true;
+	}
 }
 

@@ -5,6 +5,7 @@ import java.util.List;
 import com.example.pathhack.dto.CreateCouponControllerDTO;
 import com.example.pathhack.dto.GetCouponResponse;
 import com.example.pathhack.dto.ReceivedCouponDTO;
+import com.example.pathhack.dto.UseTheCouponDTO;
 import com.example.pathhack.dto.UserResponse;
 
 public interface CouponService {
@@ -13,4 +14,6 @@ public interface CouponService {
 	void createCoupon(CreateCouponControllerDTO createCouponControllerDTO);
 
 	void receivedCoupon(ReceivedCouponDTO receivedCouponDTO);
+
+	void useTheCoupon(UseTheCouponDTO useTheCouponDTO);
 }

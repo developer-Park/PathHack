@@ -35,4 +35,8 @@ public class ReceivedCoupon {
 		this.couponName = couponName;
 		this.user = user;
 	}
+
+	public void updateIsUsed() {
+		this.isUsed = true;
+	}
 }

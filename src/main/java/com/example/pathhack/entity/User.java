@@ -40,5 +40,9 @@ public class User extends TimeStamped {
 	public void updateGrapeCount() {
 		this.grapeCount++;
 	}
+
+	public void minusGrapeCount() {
+		this.grapeCount -= 14;
+	}
 }
 
