@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+    <link type="text/css" th:href="@{/css/admin-style.css}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/css.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+            crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" th:src="@{/js/admin.js}"></script>
+    <title>지잉, 엄마! 나 이 닦는 중</title>
+
+</head>
+<body>
+<header>
+    <a href="/admin/templates/main">
+        <div style="font-size: 30px">지잉, 엄마! 나 이 닦는 중</div>
+    </a>
+    <nav>
+        <ul>
+            <a href="/">부모님</a>
+            <a href="#" onclick="sendTokenDelete();">Logout</a>
+        </ul>
+    </nav>
+</header>
+<nav class="menus">
+    <ul>
+        <a href="/api/user/1">사용자</a>
+        <a href="/event/">이벤트 목록</a>
+        <a href="/api/coupon">쿠폰 목록</a>
+        <a href="/api/received-coupon">쿠폰함</a>
+    </ul>
+</nav>
+
+<div class="body">
+    <h1 style="color: #8B60C7">고객페이지</h1>
+    <div class="sellerManagement">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">번호</th>
+                <th scope="col">아이이름</th>
+                <th scope="col">부모이름</th>
+                <th scope="col">포도알 수</th>
+            </tr>
+            </thead>
+            <tbody id="restaurantListTable">
+            <div th:each="user, iStat : ${users}">
+                <tr>
+                    <th scope="row" th:text="${users.userId}">1</th>
+                    <td th:text="${users.kidName}"></td>
+                    <td th:text="${users.parentName}"></td>
+                    <td th:text="${users.grapeCount}"></td>
+                    <td>
+                        <div class="sellerManagementBtn">
+                            <form th:action="@{'/api/user/dummy'}"
+                                  th:method="post">
+                                <input type="submit" class="btn " value="포도알 받기">
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            </div>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div class="frame">
+    <button class="getPodoBtn">포도를 받자</button>
+    <h2></h2>
+    <img id="podo-img">
+</div>
+
+
+<script>
+    let podoImageUrls = [
+        '/assets/podo0.png',
+        '/assets/podo1.png',
+        '/assets/podo2.png',
+        '/assets/podo3.png',
+        '/assets/podo4.png',
+        '/assets/podo5.png',
+        '/assets/podo6.png',
+        '/assets/podo7.png',
+        '/assets/podo8.png',
+        '/assets/podo9.png',
+        '/assets/podo10.png',
+        '/assets/podo11.png',
+        '/assets/podo12.png',
+        '/assets/podo13.png',
+        '/assets/podo14.png',
+    ];
+
+    let podoIndex = 0;
+    let podoImg = document.getElementById('podo-img');
+    let button = document.querySelector('.getPodoBtn');
+
+    function changePodoImage() {
+        let imgUrl = podoImageUrls[podoIndex];
+        let xhr = new XMLHttpRequest();
+        xhr.onreadystatechange = function () {
+            if (this.readyState === 4 && this.status === 200) {
+                podoImg.src = URL.createObjectURL(this.response);
+            }
+        };
+        xhr.open('GET', imgUrl);
+        xhr.responseType = 'blob';
+        xhr.send();
+        podoIndex = (podoIndex + 1) % podoImageUrls.length;
+    }
+
+    button.addEventListener('click', changePodoImage);
+</script>
+
+</body>
+
+
+</html>

@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ReceivedCoupon {
+public class ReceivedCoupon extends TimeStamped {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "received_coupon_id")
@@ -31,9 +31,10 @@ public class ReceivedCoupon {
 	@JoinColumn(name = "user_id", nullable = false)
 	private User user;
 
-	public ReceivedCoupon(User user,String couponName) {
+	public ReceivedCoupon(User user, String couponName) {
 		this.couponName = couponName;
 		this.user = user;
+		this.isUsed = false;
 	}
 
 	public void updateIsUsed() {

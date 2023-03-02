@@ -1,13 +1,10 @@
 package com.example.pathhack.service.impl;
 
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -46,13 +43,32 @@ public class UserServiceImpl implements UserService {
 	public void addGrapeCount() throws IOException {
 		User user = userRepository.findById(1L)
 			.orElseThrow(() -> new IllegalArgumentException("유저가 존재하지 않습니다."));
-		BufferedReader reader = new BufferedReader(new FileReader("c:\\pathhack\\text.txt"));
+		BufferedReader reader = new BufferedReader(new FileReader("c:\\pathhack\\test1.txt"));
 		String ch;
 		int brushCount = 0;
-		while ((ch = reader.readLine()) != null) {
-			if (Integer.parseInt(ch.substring(20)) >= 1000)
-				brushCount++;
+		LocalDateTime now = LocalDateTime.now();
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+		// 포맷 적용
+		String formatedNow = now.format(formatter);
 
+		while ((ch = reader.readLine()) != null) {
+			String ch1 = ch;
+			//Arduino's test1.txt file make one enter each line.
+			//2023-02-25 11:08:53 248
+			//
+			//2023-02-25 11:08:36 249
+			//
+			//2023-02-25 11:08:53 248
+			//
+			//2023-02-25 11:08:53 248
+			if (ch1.isEmpty()) {
+				continue;
+			}
+			//only need a year,month,day
+			if (Integer.parseInt(ch.substring(20)) >= 200 && ch1.substring(0, 10).equals(formatedNow)) {
+				brushCount++;
+			}
+			//if kids brushed their teeth over three time a day, they will get a one grape coupon.
 			if (brushCount == 3) {
 				user.updateGrapeCount();
 				break;

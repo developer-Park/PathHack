@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+            crossorigin="anonymous"></script>
+    <link type="text/css" th:href="@{/css/admin-style.css}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/css.css}">
+    <link rel="stylesheet" th:href="@{/css/bootstrap.min.css}">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+            integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+            crossorigin="anonymous"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" th:src="@{/js/admin.js}"></script>
+    <script type="text/javascript" th:src="@{/js/admin/basic.js}"></script>
+    <title>지잉, 엄마! 나 이 닦는 중</title>
+</head>
+<body>
+<header>
+    <a href="/admin/templates/main">
+        <div style="font-size: 30px">지잉, 엄마! 나 이 닦는 중</div>
+    </a>
+    <nav>
+        <ul>
+            <a href="/">부모님</a>
+            <a href="#" onclick="sendTokenDelete();">Logout</a>
+        </ul>
+    </nav>
+</header>
+
+<nav class="menus">
+    <ul>
+        <a href="/api/user/1">사용자</a>
+        <a href="/event/">이벤트 목록</a>
+        <a href="/api/coupon">쿠폰 목록</a>
+        <a href="/api/received-coupon">쿠폰함</a>
+    </ul>
+</nav>
+
+<div class="body">
+    <h1 style="color: #8B60C7">쿠폰 목록</h1>
+    <div class="restaurantList">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">번호</th>
+                <th scope="col">쿠폰이름</th>
+                <th scope="col">해당쿠폰수령여부</th>
+
+            </tr>
+            </thead>
+            <tbody id="restaurantListTable">
+            <div th:each="coupon, iStat : ${coupons}">
+                    <tr>
+                        <th scope="row" th:text="${coupon.couponId}">1</th>
+                        <td th:text="${coupon.couponName}"></td>
+
+                        <td th:if="${coupon.isUsed== true}">
+                            <span>수령완료</span>
+                        </td>
+                        <td th:if="${coupon.isUsed== false}"><span>수령가능</span></td>
+                        <td>
+                            <div class="restaurantBtn">
+                                <form th:action="@{'/api/coupon/user/' + ${coupon.couponId}}" th:method="post">
+                                    <div class="form-group">
+                                        <button type="submit" class="btn" value="쿠폰받기">쿠폰수령</button>
+                                    </div>
+                                </form>
+<!--                                <form th:action="@{'/api/coupon/user/'+ ${coupon.couponId}}" th:method="put">-->
+<!--                                    <div class="form-group">-->
+<!--                                        <button type="submit" class="btn" value="쿠폰사용">쿠폰사용</button>-->
+<!--                                    </div>-->
+<!--                                </form>-->
+                            </div>
+                        </td>
+                    </tr>
+                </div>
+            </div>
+
+            </tbody>
+        </table>
+    </div>
+</div>
+</body>
+</html>
