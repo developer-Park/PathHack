@@ -1,11 +1,16 @@
 package com.example.pathhack.service.impl;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileOutputStream;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,8 +19,6 @@ import com.example.pathhack.dto.GetUserDTO;
 import com.example.pathhack.dto.GetUserServiceDTO;
 import com.example.pathhack.dto.UserResponse;
 import com.example.pathhack.entity.User;
-import com.example.pathhack.repository.CouponRepository;
-import com.example.pathhack.repository.EventRepository;
 import com.example.pathhack.repository.UserRepository;
 import com.example.pathhack.service.UserService;
 
@@ -24,9 +27,8 @@ import lombok.RequiredArgsConstructor;
 @Service
 @Transactional
 @RequiredArgsConstructor
+@EnableScheduling
 public class UserServiceImpl implements UserService {
-	private final CouponRepository couponRepository;
-	private final EventRepository eventRepository;
 	private final UserRepository userRepository;
 
 	@Override
@@ -40,10 +42,12 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
+	@Scheduled(cron = "0 0 23 * * ?")
 	public void addGrapeCount() throws IOException {
 		User user = userRepository.findById(1L)
 			.orElseThrow(() -> new IllegalArgumentException("유저가 존재하지 않습니다."));
 		BufferedReader reader = new BufferedReader(new FileReader("c:\\pathhack\\test1.txt"));
+		BufferedWriter backup = new BufferedWriter(new FileWriter("c:\\pathhack\\testBackup.txt", true));
 		String ch;
 		int brushCount = 0;
 		LocalDateTime now = LocalDateTime.now();
@@ -64,27 +68,29 @@ public class UserServiceImpl implements UserService {
 			if (ch1.isEmpty()) {
 				continue;
 			}
-			//only need a year,month,day
+
+			backup.write("\n");
+			backup.write(ch1);
+			backup.flush();
+			//formatedNow == yyyy-MM-DD
 			if (Integer.parseInt(ch.substring(20)) >= 200 && ch1.substring(0, 10).equals(formatedNow)) {
 				brushCount++;
 			}
-			//if kids brushed their teeth over three time a day, they will get a one grape coupon.
-			if (brushCount == 3) {
-				user.updateGrapeCount();
-				break;
+		}
+		//if kids brushed their teeth over three time a day, they will get a one grape coupon.
+		if (brushCount >= 3) {
+			user.updateGrapeCount();
+			try (FileOutputStream fos = new FileOutputStream("c:\\pathhack\\test1.txt", false)) {
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
 		}
 		reader.close();
-		System.out.println("user.getGrapeCount() = " + user.getGrapeCount());
 	}
-	// 	}
-	// }
-	// return listA;
 
 	@Override
 	public void createUser(CreateUserDTO createUser) {
 		User user = new User(createUser);
 		userRepository.save(user);
-
 	}
 }

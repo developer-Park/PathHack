@@ -1,6 +1,5 @@
 package com.example.pathhack.service;
 
-import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import com.example.pathhack.dto.CreateUserDTO;
@@ -13,4 +12,5 @@ public interface UserService {
 	void addGrapeCount() throws IOException;
 
 	void createUser(CreateUserDTO createUser);
+
 }
