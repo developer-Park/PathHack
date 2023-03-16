@@ -32,22 +32,12 @@ public class UserServiceImpl implements UserService {
 	private final UserRepository userRepository;
 
 	@Override
-	public UserResponse getUser(GetUserDTO getUserDTO) {
-		User user = userRepository.findById(getUserDTO.getUserId())
-			.orElseThrow(() -> new IllegalArgumentException("유저가 존재하지 않습니다."));
-		GetUserServiceDTO getUserServiceDTO = new GetUserServiceDTO(user.getId(), user.getKidName(),
-			user.getParentName(),
-			user.getGrapeCount());
-		return new UserResponse(getUserServiceDTO);
-	}
-
-	@Override
 	@Scheduled(cron = "0 0 23 * * ?")
 	public void addGrapeCount() throws IOException {
 		User user = userRepository.findById(1L)
-			.orElseThrow(() -> new IllegalArgumentException("유저가 존재하지 않습니다."));
-		BufferedReader reader = new BufferedReader(new FileReader("c:\\pathhack\\test1.txt"));
-		BufferedWriter backup = new BufferedWriter(new FileWriter("c:\\pathhack\\testBackup.txt", true));
+			.orElseThrow(() -> new IllegalArgumentException("user does not exist."));
+		BufferedReader reader = new BufferedReader(new FileReader("c:\\pathhack\\HardwareData.txt"));
+		BufferedWriter backup = new BufferedWriter(new FileWriter("c:\\pathhack\\Backup.txt", true));
 		String ch;
 		int brushCount = 0;
 		LocalDateTime now = LocalDateTime.now();
@@ -68,7 +58,7 @@ public class UserServiceImpl implements UserService {
 			if (ch1.isEmpty()) {
 				continue;
 			}
-
+			//backup data
 			backup.write("\n");
 			backup.write(ch1);
 			backup.flush();
@@ -80,12 +70,24 @@ public class UserServiceImpl implements UserService {
 		//if kids brushed their teeth over three time a day, they will get a one grape coupon.
 		if (brushCount >= 3) {
 			user.updateGrapeCount();
-			try (FileOutputStream fos = new FileOutputStream("c:\\pathhack\\test1.txt", false)) {
+
+			//reset data everyday
+			try (FileOutputStream fos = new FileOutputStream("c:\\pathhack\\HardwareData.txt", false)) {
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
 		reader.close();
+	}
+
+	@Override
+	public UserResponse getUser(GetUserDTO getUserDTO) {
+		User user = userRepository.findById(getUserDTO.getUserId())
+			.orElseThrow(() -> new IllegalArgumentException("유저가 존재하지 않습니다."));
+		GetUserServiceDTO getUserServiceDTO = new GetUserServiceDTO(user.getId(), user.getKidName(),
+			user.getParentName(),
+			user.getGrapeCount());
+		return new UserResponse(getUserServiceDTO);
 	}
 
 	@Override
